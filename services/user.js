@@ -22,6 +22,19 @@ const UserService = {
                 callback(user);
             })
     },
+    getUserByEmail: (email, callback) => {
+        User.findOne({email: email})
+            .populate('friends')
+            .populate('friendrequests')
+            .populate('credits')
+            .populate('debtrequests')
+            .populate('history')
+            .exec((err,user) => {
+                if(err) return err
+                console.log("service by name: " + user);
+                callback(user);
+            })
+    },
     getUserFriendRequests: (userid, callback) => {
         FriendRequest.find({from: userid, status: 'waiting'})
             .populate('to')

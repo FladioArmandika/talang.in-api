@@ -11,18 +11,24 @@ module.exports = (app) => {
     app.use('/user', route);
 
     route.get('/', async(req,res) => {
-        var userId = req.body.userid
+        var userId = req.body.userid;
+        var email = req.body.email;
 
         // CHECK IF USERID EXISTS
         if(!userId) {
             UserService.getAllUser((data) => {
                 console.log("route: " + data);
-                res.send(data)
+                res.send(data);
+            })
+        } else if (email) {
+            UserService.getUserByEmail(email, (data) => {
+                console.log("[GET] GET USER BY EMAIL");
+                res.data(data);
             })
         } else {
             UserService.getUserInfo(userId, (data) => {
                 console.log(data);
-                res.send(data)
+                res.send(data);
             })
         }
     })
