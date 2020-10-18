@@ -2,10 +2,12 @@ const User  = require('../models/user')
 const FriendRequest = require('../models/friendrequest')
 const Creditor = require('../models/creditor')
 
+
+
 const UserService = {
     getAllUser: (callback) => {
         User.find({}, (err,data) => {
-            console.log("service : " + data);
+            // console.log("service : " + data);
             callback(data)
         })
     },
@@ -14,26 +16,33 @@ const UserService = {
             .populate('friends')
             .populate('friendrequests')
             .populate('credits')
-            .populate('debtrequests')
+            .populate('debts')
             .populate('history')
             .exec((err,user) => {
-                if(err) return err
+                if(err) {
+                    console.log(err);
+                }
                 console.log("service by id: " + user);
                 callback(user);
             })
     },
     getUserByEmail: (email, callback) => {
-        User.findOne({email: email})
-            .populate('friends')
-            .populate('friendrequests')
-            .populate('credits')
-            .populate('debtrequests')
-            .populate('history')
-            .exec((err,user) => {
-                if(err) return err
-                console.log("service by name: " + user);
-                callback(user);
-            })
+        console.log("service by email: " + email);
+        try {
+            User.findOne({email: email})
+                .populate('friends')
+                .populate('friendrequests')
+                .populate('credits')
+                // .populate('debts')
+                // .populate('history')
+                .exec((err,user) => {
+                    if(err) return err
+                        callback(user);
+                })
+        } catch(e) {
+            console.log(e);
+        }
+        
     },
     getUserFriendRequests: (userid, callback) => {
         FriendRequest.find({from: userid, status: 'waiting'})

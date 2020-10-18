@@ -21,6 +21,5 @@
     "mongoose": "^5.10.0",
     "passport": "^0.4.1",
     "passport-google-oauth": "^2.0.0"
-  },
-  "proxy": "http://localhost:3001"
+  }
 }

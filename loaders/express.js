@@ -30,6 +30,7 @@ module.exports = (app) => {
     app.use(passport.initialize());
     app.enable('trust proxy');
     app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({extended:true}));
     app.use(config.api.prefix, routes())
     
     

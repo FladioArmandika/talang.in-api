@@ -17,7 +17,10 @@ const AuthService = {
             // Save to database
             // Save by Email
             User.findOneAndUpdate({email: user.email},
-                {token: token}, 
+                {
+                    token: token,
+                    // isAuthenticated: true,
+                }, 
                 {new: true, upsert: true},
                 (err, result) => {
                     if (err)

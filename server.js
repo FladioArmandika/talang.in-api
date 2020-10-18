@@ -1,9 +1,14 @@
 const express   = require('express');
 const config    = require('./config');
 const cors      = require('cors');
+const bodyParser    = require('body-parser')
+
 
 const startServer = async() => {
     const app = express();
+    app.use(cors());
+    app.use(bodyParser.json());
+
     await require('./loaders')(app);
 
     app.use(cors());

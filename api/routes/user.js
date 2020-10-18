@@ -9,28 +9,37 @@ const route     = Router();
 
 module.exports = (app) => {
     app.use('/user', route);
-
+    
     route.get('/', async(req,res) => {
+        UserService.getAllUser((data) => {
+            console.log("[GET] GET ALL USERS");
+            console.log(data);
+            res.send(data);
+        })
+    })
+
+
+    route.post('/', async(req,res) => {
         var userId = req.body.userid;
         var email = req.body.email;
-
+        console.log(email);
+        
         // CHECK IF USERID EXISTS
-        if(!userId) {
-            UserService.getAllUser((data) => {
-                console.log("route: " + data);
-                res.send(data);
-            })
-        } else if (email) {
-            UserService.getUserByEmail(email, (data) => {
-                console.log("[GET] GET USER BY EMAIL");
-                res.data(data);
-            })
-        } else {
+        if (userId) {
+            console.log();
             UserService.getUserInfo(userId, (data) => {
+                console.log("[GET] GET USER INFO");
                 console.log(data);
                 res.send(data);
             })
-        }
+        } else if (email) {
+            console.log("GET USER BY EMAIL");
+            UserService.getUserByEmail(email, (data) => {
+                console.log("[GET] GET USER BY EMAIL");
+                console.log(data);
+                res.send(data);
+            })
+        } 
     })
 
     route.post('/friend', async(req,res) => {
