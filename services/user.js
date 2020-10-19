@@ -14,10 +14,16 @@ const UserService = {
     getUserInfo: (userid, callback) => {
         User.findOne({_id: userid})
             .populate('friends')
-            .populate('friendrequests')
+            .populate({
+                path: 'friendrequests',
+                populate: [
+                    {path: 'from'},
+                    {path: 'to'}
+                ]
+            })
             .populate('credits')
-            .populate('debts')
-            .populate('history')
+            // .populate('debts')
+            // .populate('history')
             .exec((err,user) => {
                 if(err) {
                     console.log(err);
@@ -62,19 +68,34 @@ const UserService = {
             })
     },
     createFriendRequest: (userId, email, callback) => {
-        User.findOne({email: email})
-            .exec((err,user) => {
+
+        console.log("userid: " + userId);
+        console.log("email: " + email);
+
+        User.findOne({email:email})
+            .then((result) => {
                 var friendRequest = new FriendRequest({
                     from: userId,
-                    to: user.email,
+                    to: result._id,
                     status: 'waiting',
                 })
+                
                 friendRequest.save()
-                    .then((err,result) => {
-                        callback({
-                            err,
-                            data: result,
-                        })
+                    .then((result) => {
+                        // UPDATE SENTUSER
+                        User.findOneAndUpdate({email: email}, {'$push': { 'friendrequests': result._id }})
+                            .then(() => {
+                                console.log("FIND USER " + userId);
+                                // UPDATE FROMUSER
+                                User.findOneAndUpdate({_id: userId}, {'$push': { 'friendrequests': result._id }})
+                                    .then(() => {
+                                        callback({
+                                            data: result,
+                                        })
+                                    })
+                                    .catch(e => console.log(e))
+                            })
+                            .catch(e => console.log(e))  
                     })
                     .catch(err => console.log(err))
             })

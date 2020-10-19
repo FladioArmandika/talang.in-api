@@ -22,11 +22,11 @@ module.exports = (app) => {
     route.post('/', async(req,res) => {
         var userId = req.body.userid;
         var email = req.body.email;
-        console.log(email);
+        console.log("email : " + email);
+        console.log("userId : " + userId);
         
         // CHECK IF USERID EXISTS
         if (userId) {
-            console.log();
             UserService.getUserInfo(userId, (data) => {
                 console.log("[GET] GET USER INFO");
                 console.log(data);
@@ -41,6 +41,7 @@ module.exports = (app) => {
             })
         } 
     })
+
 
     route.post('/friend', async(req,res) => {
         var userId = req.body.userid
