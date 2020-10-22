@@ -18,7 +18,6 @@ module.exports = (app) => {
         })
     })
 
-
     route.post('/', async(req,res) => {
         var userId = req.body.userid;
         var email = req.body.email;
