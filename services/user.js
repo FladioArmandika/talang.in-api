@@ -100,9 +100,11 @@ const UserService = {
                     .catch(err => console.log(err))
             })
     },
-    updateFriendRequest: (requestId, status, callback) => {
+    acceptFriendRequest: (requestId, status, callback) => {
         FriendRequest.findOneAndUpdate({_id: requestId}, {status: status})
-            .then((err,result) => {
+            .then(result => {
+                // UPDATE FROM 
+                User.updateMany  AndUpdate({_id: result.from}, {'$pull': { 'friendrequests': requestId }})
                 callback({
                     err,
                     data: 'update friend request successful'

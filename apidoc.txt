@@ -3,6 +3,7 @@
 /user
 [ GET ] return user information
 
+
     /friend
     [ GET ] return user friendlist by id
     [ POST ] add friend request

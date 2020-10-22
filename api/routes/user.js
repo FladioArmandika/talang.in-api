@@ -74,16 +74,18 @@ module.exports = (app) => {
 
     route.post('/friend/request', async(req,res) => {
         var status = req.body.status
-        var requestId = req.body.requestId
+        var friendRequestId = req.body.friendRequestId
         
-        if(!status) {
-            UserService.updateFriendRequest(requestId, status, (results) => {
+        if(status == 'accept') {
+            UserService.updateFriendRequest(friendRequestId, status, (results) => {
                 if(result.err) {
                     res.send({error: result.err}).status(401)
                 } else {
                     res.send(result.data).status(200)
                 }
             })
+        } else if (status == 'reject' ) {
+            
         }
     })
 
